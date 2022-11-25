@@ -170,8 +170,21 @@ class AnnaishoWindow:
         entry_bg_3 = canvas.create_image(298.0,713.0,image=entry_image_3)
         button_image_1 = PhotoImage(file="./productinfo/button_1.png")
 
+        def reactivate(e):
+            item_code.delete(0, END)
+            item_code.config(insertontime=600)
+            product_name.config(text = "")
+            retail_price.config(text = "")
+            retail_price_zeikomi.config(text = "")
+            half_case.config(text = "")
+            half_case_zeikomi.config(text = "")
+            case_price.config(text = "")
+            case_price_zeikomi.config(text = "")
+            jan_bara.config(text = "")
+            jan_case.config(text = "")
 
         def find_item(event):
+            item_code.config(insertontime=0)
             with open("products.csv", encoding="UTF8") as file:
                 r = csv.reader(file)
                 item = item_code.get()
@@ -196,6 +209,7 @@ class AnnaishoWindow:
                         case_price.config(text = f"¥{item_info[4]}")
                         case_price_zeikomi.config(text = f"¥税込み \n¥{round(float(item_info[4]) * 1.08)}")"""
 
+
         def print_save():
             path = f"./record/{item_code.get()}.png"
             titles = getAllTitles()
@@ -209,7 +223,7 @@ class AnnaishoWindow:
             im = im.crop((left+10, top+35,right-239,bottom-10))
             im.save(path)
             im.show(path)
-
+            item_code.configure(insertontime=1)
         #Label
         canvas.create_text(313, 37,anchor="center",text="AKABANE BUSSAN CO., LTD.",font=("Inter", 20 * -1))
         canvas.create_text(313, 57,anchor="center",text="赤羽物産有限会社",font=("Inter", 20 * -1))
@@ -258,7 +272,8 @@ class AnnaishoWindow:
         #Button
         button_1 = Button(canvas,image=button_image_1,borderwidth=0,command=print_save,relief="flat")
         button_1.place(x=668.0,y=24.0,width=136.0,height=29.0)
-
+        
+        window.bind('<Escape>', lambda e: reactivate(e))
         #window.resizable(False, False)
         window.mainloop()
 
